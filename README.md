@@ -48,6 +48,8 @@ Also has a RefreshIndicator that sends request with index zero.
   }
 ````
 
+![screenshot](screenshots/screenshot_00.png)
+
 
 ## Getting Started
 
