@@ -56,10 +56,8 @@ class FetchMoreBloc extends Bloc<FetchMoreEvent, FetchMoreState> {
             _searchTerm != ""
                 ? list = await dataFetcher(index, limit, _searchTerm)
                 : list = await dataFetcher(index, limit);
-            print(list);
           } catch (e) {
             list = <dynamic>[];
-            print(list);
             print(e);
           }
           yield list.isEmpty

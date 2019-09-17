@@ -13,67 +13,45 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
-    );
-  }
-}
-
-class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
-
-  final String title;
-
-  @override
-  _MyHomePageState createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
-      body: FetchMoreBuilder(
-        itemBuilder: (BuildContext context, List list, int index) {
-          return Card(
-            child: Container(
-              height: 50,
-              child: Center(
-                child: Text(
-                  list.elementAt(index).toString(),
-                ),
-              ),
-            ),
-          );
-        },
-        dataFetcher: _dataFetcher,
-        limit: 20,
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: Icon(Icons.add),
+      home: Scaffold(
+        appBar: AppBar(
+          title: Text('Fetch More Builder'),
+        ),
+        body: FetchMoreBuilder(
+          itemBuilder: _itemBuilder,
+          dataFetcher: _dataFetcher,
+          limit: 20,
+        ),
       ),
     );
   }
 
+  /// You can get your data from the server in this function
   Future<List<dynamic>> _dataFetcher(int index, int limit,
       [String searchTerm]) async {
     await Future.delayed(Duration(milliseconds: 1000));
     List list = [];
+    if (index == 60) {
+      // returning empty List tells to the FetchMoreBuilder data finished.
+      return list;
+    }
     for (int i = 0; i < limit; i++) {
       Random rdm = Random();
       list.add(rdm.nextInt(100));
     }
     return list;
+  }
+
+  Widget _itemBuilder(BuildContext context, List list, int index) {
+    return Card(
+      child: Container(
+        height: 50,
+        child: Center(
+          child: Text(
+            list.elementAt(index).toString(),
+          ),
+        ),
+      ),
+    );
   }
 }
