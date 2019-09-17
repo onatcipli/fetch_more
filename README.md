@@ -5,7 +5,7 @@ I inspired from [Felix Angelov](https://twitter.com/felangelov)'s [flutter bloc 
 A Flutter package that helps to collect and show data inside a ListView with a limit and fetch more when user needs more data.
 Also has a RefreshIndicator that sends request with index zero.
 
-##FetchMoreBuilder
+#FetchMoreBuilder
 ````
         FetchMoreBuilder(
           itemBuilder: _itemBuilder,
@@ -14,7 +14,7 @@ Also has a RefreshIndicator that sends request with index zero.
         )
 ````
     
-##DataFetcher: 
+#DataFetcher: 
 ````
   Future<List<dynamic>> _dataFetcher(int index, int limit,
       [String searchTerm]) async {
@@ -32,7 +32,7 @@ Also has a RefreshIndicator that sends request with index zero.
   }
 
 ````
-##ItemBuilder 
+#ItemBuilder 
 ````
   Widget _itemBuilder(BuildContext context, List list, int index) {
     return Card(
