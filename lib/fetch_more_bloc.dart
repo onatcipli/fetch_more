@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:bloc/bloc.dart';
+import 'package:fetch_more/fetch_more.dart';
 import 'package:rxdart/rxdart.dart';
-import './bloc.dart';
 
 class FetchMoreBloc extends Bloc<FetchMoreEvent, FetchMoreState> {
   DataFetcher dataFetcher;
