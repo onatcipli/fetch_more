@@ -1,6 +1,6 @@
 import 'dart:math';
 
-import 'package:fetch_more/bloc.dart';
+import 'package:fetch_more/fetch_more.dart';
 import 'package:flutter/material.dart';
 
 void main() => runApp(MyApp());

@@ -81,6 +81,10 @@ class FetchMoreBloc extends Bloc<FetchMoreEvent, FetchMoreState> {
       yield InitialFetchMoreState();
       dispatch(Fetch());
       return;
+    } else if (event is ListViewIsNotScrollable) {
+      if (currentState is Fetched) {
+        yield (currentState as Fetched).copyWith(hasReachedMax: true);
+      }
     }
   }
 

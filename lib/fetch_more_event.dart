@@ -15,3 +15,5 @@ class Search extends FetchMoreEvent {
 
   Search(this.searchTerm);
 }
+
+class ListViewIsNotScrollable extends FetchMoreEvent {}

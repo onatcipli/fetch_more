@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:fetch_more/fetch_more.dart';
 import 'package:fetch_more/fetch_more_bloc.dart';
 import 'package:flutter/material.dart';
@@ -39,6 +41,8 @@ class FetchMoreBuilder extends StatefulWidget {
 class _FetchMoreBuilderState extends State<FetchMoreBuilder> {
   FetchMoreBloc fetchMoreBloc;
   ScrollController _scrollController;
+
+  GlobalKey<ScrollableState> _listViewKey;
 
   DataFetcher get _dataFetcher => widget.dataFetcher;
 
@@ -84,6 +88,7 @@ class _FetchMoreBuilderState extends State<FetchMoreBuilder> {
           }
           return RefreshIndicator(
             child: ListView.builder(
+              key: _listViewKey,
               itemBuilder: (BuildContext context, int index) {
                 return index >= state.list.length
                     ? BottomLoader()
@@ -105,6 +110,7 @@ class _FetchMoreBuilderState extends State<FetchMoreBuilder> {
   }
 
   void handleInitState() {
+    _listViewKey = GlobalKey<ScrollableState>();
     if (widget.fetchMoreBloc == null) {
       fetchMoreBloc =
           FetchMoreBloc(dataFetcher: _dataFetcher, limit: widget.limit);
@@ -114,6 +120,31 @@ class _FetchMoreBuilderState extends State<FetchMoreBuilder> {
       fetchMoreBloc.limit = widget.limit;
     }
     _scrollController = ScrollController();
+    WidgetsBinding.instance.addPostFrameCallback(
+      (Duration duration) async {
+        if (_listViewKey.currentContext == null) {
+          Timer.periodic(
+            Duration(milliseconds: 1000),
+            (t) {
+              if (_scrollController.positions.isEmpty) {
+                return;
+              } else {
+                if (_scrollController.position.minScrollExtent == 0.0 &&
+                    _scrollController.position.maxScrollExtent == 0.0) {
+                  fetchMoreBloc.dispatch(ListViewIsNotScrollable());
+                  t.cancel();
+                }
+              }
+            },
+          );
+        } else {
+          if (_scrollController.position.minScrollExtent == 0.0 &&
+              _scrollController.position.maxScrollExtent == 0.0) {
+            fetchMoreBloc.dispatch(ListViewIsNotScrollable());
+          }
+        }
+      },
+    );
     _scrollController.addListener(_handleOnScroll);
   }
 
