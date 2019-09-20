@@ -10,11 +10,11 @@ Also has a RefreshIndicator that sends request with index zero.
 
 
 ````
-        FetchMoreBuilder(
-          itemBuilder: _itemBuilder,
-          dataFetcher: _dataFetcher,
-          limit: 20,
-        )
+FetchMoreBuilder(
+  itemBuilder: _itemBuilder,
+  dataFetcher: _dataFetcher,
+  limit: 20,
+)
 ````
 
 
