@@ -23,6 +23,9 @@ class FetchMoreBuilder extends StatefulWidget {
 
   final DataFetcher dataFetcher;
   final ItemBuilder itemBuilder;
+  final Widget bottomLoaderBuilder;
+  final Widget errorBuilder;
+
   final int limit;
   final double scrollThreshold;
 
@@ -32,6 +35,8 @@ class FetchMoreBuilder extends StatefulWidget {
     @required this.limit,
     this.fetchMoreBloc,
     this.scrollThreshold = 200.0,
+    this.bottomLoaderBuilder = const DefaultBottomLoader(),
+    this.errorBuilder = const DefaultErrorBuilder(),
   });
 
   @override
@@ -76,9 +81,7 @@ class _FetchMoreBuilderState extends State<FetchMoreBuilder> {
     return BlocBuilder<FetchMoreBloc, FetchMoreState>(
       builder: (context, state) {
         if (state is FetchError) {
-          return Center(
-            child: Text('Failed to fetch posts'),
-          );
+          return widget.errorBuilder;
         }
         if (state is Fetched) {
           if (state.list.isEmpty) {
@@ -91,7 +94,7 @@ class _FetchMoreBuilderState extends State<FetchMoreBuilder> {
               key: _listViewKey,
               itemBuilder: (BuildContext context, int index) {
                 return index >= state.list.length
-                    ? BottomLoader()
+                    ? widget.bottomLoaderBuilder
                     : _itemBuilder(context, state.list, index);
               },
               itemCount: state.hasReachedMax
@@ -162,7 +165,9 @@ class _FetchMoreBuilderState extends State<FetchMoreBuilder> {
   }
 }
 
-class BottomLoader extends StatelessWidget {
+class DefaultBottomLoader extends StatelessWidget {
+  const DefaultBottomLoader();
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -179,6 +184,17 @@ class BottomLoader extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+}
+
+class DefaultErrorBuilder extends StatelessWidget {
+  const DefaultErrorBuilder();
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Text('Failed to fetch posts'),
     );
   }
 }
