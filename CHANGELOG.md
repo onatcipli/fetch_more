@@ -1,3 +1,7 @@
+## [0.0.4] - 2019-09-25.
+
+* Fix for fetching more data When ListView is not scrollable too.
+
 ## [0.0.3] - 2019-09-20.
 
 * CircularProgressIndicator hide fix

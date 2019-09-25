@@ -54,8 +54,8 @@ FetchMoreBuilder(
   }
 ````
 
-![screenshot](screenshots/screenshot_00.png)
 
+![screenshot](screenshots/screenshot_00.png)
 
 ## Getting Started
 

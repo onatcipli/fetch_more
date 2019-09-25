@@ -134,7 +134,7 @@ class _FetchMoreBuilderState extends State<FetchMoreBuilder> {
               } else {
                 if (_scrollController.position.minScrollExtent == 0.0 &&
                     _scrollController.position.maxScrollExtent == 0.0) {
-                  fetchMoreBloc.dispatch(ListViewIsNotScrollable());
+                  fetchMoreBloc.dispatch(Fetch());
                   t.cancel();
                 }
               }
@@ -143,7 +143,7 @@ class _FetchMoreBuilderState extends State<FetchMoreBuilder> {
         } else {
           if (_scrollController.position.minScrollExtent == 0.0 &&
               _scrollController.position.maxScrollExtent == 0.0) {
-            fetchMoreBloc.dispatch(ListViewIsNotScrollable());
+            fetchMoreBloc.dispatch(Fetch());
           }
         }
       },
