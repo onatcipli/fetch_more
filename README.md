@@ -9,7 +9,7 @@ Also has a RefreshIndicator that sends request with index zero.
 ## FetchMoreBuilder
 
 
-````
+````dart
 FetchMoreBuilder(
   itemBuilder: _itemBuilder,
   dataFetcher: _dataFetcher,
@@ -20,7 +20,7 @@ FetchMoreBuilder(
 
 ## DataFetcher:
 
-````
+````dart
   Future<List<dynamic>> _dataFetcher(int index, int limit,
       [String searchTerm]) async {
     await Future.delayed(Duration(milliseconds: 1000));
@@ -39,7 +39,7 @@ FetchMoreBuilder(
 ````
 ## ItemBuilder 
 
-````
+````dart
   Widget _itemBuilder(BuildContext context, List list, int index) {
     return Card(
       child: Container(
