@@ -6,21 +6,39 @@ A Flutter package that helps to collect and show data inside a ListView with a l
 Also has a RefreshIndicator that sends request with index zero.
 
 
+### FetchMoreBuilder with specify the LoaderWidgets
+
+  You don't need to specify LoaderWidgets.
+
+````dart
+  Widget buildFetchMoreWidget(BuildContext context) {
+    return FetchMoreBuilder(
+      errorWidget: Center(child: Text('Error Widget')),
+      bottomLoaderWidget: Center(child: Text('Bottom Loader')),
+      refreshLoaderWidget: Center(child: Text('Refresh Loader')),
+      itemBuilder: _itemBuilder,
+      dataFetcher: _dataFetcher,
+      limit: 20,
+     );
+  }
+````
+
 ## FetchMoreBuilder
 
-
-````
-FetchMoreBuilder(
-  itemBuilder: _itemBuilder,
-  dataFetcher: _dataFetcher,
-  limit: 20,
-)
+````dart
+  Widget buildFetchMoreWidget(BuildContext context) {
+    return FetchMoreBuilder(
+      itemBuilder: _itemBuilder,
+      dataFetcher: _dataFetcher,
+      limit: 20,
+     );
+  }
 ````
 
 
 ## DataFetcher:
 
-````
+````dart
   Future<List<dynamic>> _dataFetcher(int index, int limit,
       [String searchTerm]) async {
     await Future.delayed(Duration(milliseconds: 1000));
@@ -37,9 +55,10 @@ FetchMoreBuilder(
   }
 
 ````
+
 ## ItemBuilder 
 
-````
+````dart
   Widget _itemBuilder(BuildContext context, List list, int index) {
     return Card(
       child: Container(
@@ -54,8 +73,8 @@ FetchMoreBuilder(
   }
 ````
 
+[screenshot](screenshots/screenshot_00.png)
 
-![screenshot](screenshots/screenshot_00.png)
 
 ## Getting Started
 

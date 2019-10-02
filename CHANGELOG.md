@@ -1,3 +1,7 @@
+## [0.1.0] - 2019-10-02.
+
+* LoaderWidgets added
+
 ## [0.0.4] - 2019-09-25.
 
 * Fix for fetching more data When ListView is not scrollable too.

@@ -23,8 +23,16 @@ class FetchMoreBuilder extends StatefulWidget {
 
   final DataFetcher dataFetcher;
   final ItemBuilder itemBuilder;
-  final Widget bottomLoaderBuilder;
-  final Widget errorBuilder;
+
+  /// This widgets appear in the bottom of your list
+  /// when you scroll down to the bottom of your list and
+  /// it will disappear when the data fetched
+  final Widget bottomLoaderWidget;
+
+  /// When the page is refreshed with [RefreshIndicator],
+  /// this widgets will be showing to you until the data fetched
+  final Widget refreshLoaderWidget;
+  final Widget errorWidget;
 
   final int limit;
   final double scrollThreshold;
@@ -35,8 +43,9 @@ class FetchMoreBuilder extends StatefulWidget {
     @required this.limit,
     this.fetchMoreBloc,
     this.scrollThreshold = 200.0,
-    this.bottomLoaderBuilder = const DefaultBottomLoader(),
-    this.errorBuilder = const DefaultErrorBuilder(),
+    this.bottomLoaderWidget = const DefaultBottomLoader(),
+    this.errorWidget = const DefaultErrorBuilder(),
+    this.refreshLoaderWidget = const DefaultRefreshLoader(),
   });
 
   @override
@@ -81,7 +90,7 @@ class _FetchMoreBuilderState extends State<FetchMoreBuilder> {
     return BlocBuilder<FetchMoreBloc, FetchMoreState>(
       builder: (context, state) {
         if (state is FetchError) {
-          return widget.errorBuilder;
+          return widget.errorWidget;
         }
         if (state is Fetched) {
           if (state.list.isEmpty) {
@@ -94,7 +103,7 @@ class _FetchMoreBuilderState extends State<FetchMoreBuilder> {
               key: _listViewKey,
               itemBuilder: (BuildContext context, int index) {
                 return index >= state.list.length
-                    ? widget.bottomLoaderBuilder
+                    ? widget.bottomLoaderWidget
                     : _itemBuilder(context, state.list, index);
               },
               itemCount: state.hasReachedMax
@@ -105,9 +114,7 @@ class _FetchMoreBuilderState extends State<FetchMoreBuilder> {
             onRefresh: _handleOnRefresh,
           );
         }
-        return Center(
-          child: CircularProgressIndicator(),
-        );
+        return widget.refreshLoaderWidget;
       },
     );
   }
@@ -195,6 +202,17 @@ class DefaultErrorBuilder extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: Text('Failed to fetch posts'),
+    );
+  }
+}
+
+class DefaultRefreshLoader extends StatelessWidget {
+  const DefaultRefreshLoader();
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: CircularProgressIndicator(),
     );
   }
 }
