@@ -130,6 +130,25 @@ class _FetchMoreBuilderState extends State<FetchMoreBuilder> {
       fetchMoreBloc.limit = widget.limit;
     }
     _scrollController = ScrollController();
+    _handleEmptyList();
+    _scrollController.addListener(_handleOnScroll);
+  }
+
+  void _handleOnScroll() {
+    final maxScroll = _scrollController.position.maxScrollExtent;
+    final currentScroll = _scrollController.position.pixels;
+    if (maxScroll - currentScroll <= widget.scrollThreshold) {
+      fetchMoreBloc.dispatch(Fetch());
+    }
+  }
+
+  Future<void> _handleOnRefresh() async {
+    fetchMoreBloc.dispatch(Refresh());
+    _handleEmptyList();
+    await Future<dynamic>.delayed(Duration(seconds: 2));
+  }
+
+  void _handleEmptyList() {
     WidgetsBinding.instance.addPostFrameCallback(
       (Duration duration) async {
         if (_listViewKey.currentContext == null) {
@@ -155,20 +174,6 @@ class _FetchMoreBuilderState extends State<FetchMoreBuilder> {
         }
       },
     );
-    _scrollController.addListener(_handleOnScroll);
-  }
-
-  void _handleOnScroll() {
-    final maxScroll = _scrollController.position.maxScrollExtent;
-    final currentScroll = _scrollController.position.pixels;
-    if (maxScroll - currentScroll <= widget.scrollThreshold) {
-      fetchMoreBloc.dispatch(Fetch());
-    }
-  }
-
-  Future<void> _handleOnRefresh() async {
-    fetchMoreBloc.dispatch(Refresh());
-    await Future<dynamic>.delayed(Duration(seconds: 2));
   }
 }
 
