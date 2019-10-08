@@ -20,7 +20,7 @@ class MyApp extends StatelessWidget {
         body: FetchMoreBuilder(
           itemBuilder: _itemBuilder,
           dataFetcher: _dataFetcher,
-          limit: 20,
+          limit: 10,
         ),
       ),
     );

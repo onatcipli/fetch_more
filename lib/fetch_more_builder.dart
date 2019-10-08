@@ -144,8 +144,8 @@ class _FetchMoreBuilderState extends State<FetchMoreBuilder> {
 
   Future<void> _handleOnRefresh() async {
     fetchMoreBloc.dispatch(Refresh());
-    _handleEmptyList();
     await Future<dynamic>.delayed(Duration(seconds: 2));
+    _handleEmptyList();
   }
 
   void _handleEmptyList() {

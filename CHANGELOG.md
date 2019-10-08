@@ -1,3 +1,7 @@
+## [0.1.2] - 2019-10-08.
+
+* Refresh function awaiting fix
+
 ## [0.1.1] - 2019-10-07.
 
 * EmptyList Refresh Fixes
