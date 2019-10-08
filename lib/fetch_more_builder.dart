@@ -148,28 +148,42 @@ class _FetchMoreBuilderState extends State<FetchMoreBuilder> {
     _handleEmptyList();
   }
 
-  void _handleEmptyList() {
-    WidgetsBinding.instance.addPostFrameCallback(
-      (Duration duration) async {
-        if (_listViewKey.currentContext == null) {
-          Timer.periodic(
-            Duration(milliseconds: 1000),
-            (t) {
-              if (_scrollController.positions.isEmpty) {
-                return;
-              } else {
-                if (_scrollController.position.minScrollExtent == 0.0 &&
-                    _scrollController.position.maxScrollExtent == 0.0) {
-                  fetchMoreBloc.dispatch(Fetch());
-                  t.cancel();
-                }
-              }
-            },
-          );
+  void _handleRefreshTiming(Duration _totalTime) {
+    Timer.periodic(
+      Duration(milliseconds: 1000),
+      (t) {
+        if (_scrollController.positions.isEmpty) {
+          return;
         } else {
           if (_scrollController.position.minScrollExtent == 0.0 &&
               _scrollController.position.maxScrollExtent == 0.0) {
             fetchMoreBloc.dispatch(Fetch());
+            t.cancel();
+          } else {
+            _totalTime += Duration(milliseconds: 1000);
+            if (_totalTime > Duration(seconds: 20)) {
+              t.cancel();
+            }
+          }
+        }
+      },
+    );
+  }
+
+  void _handleEmptyList() {
+    WidgetsBinding.instance.addPostFrameCallback(
+      (Duration duration) async {
+        Duration _totalTime = Duration();
+        if (_listViewKey.currentContext == null) {
+          _handleRefreshTiming(_totalTime);
+        } else {
+          if (fetchMoreBloc.currentState == Fetched) {
+            if (_scrollController.position.minScrollExtent == 0.0 &&
+                _scrollController.position.maxScrollExtent == 0.0) {
+              fetchMoreBloc.dispatch(Fetch());
+            }
+          } else {
+            _handleRefreshTiming(_totalTime);
           }
         }
       },

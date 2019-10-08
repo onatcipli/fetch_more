@@ -1,3 +1,7 @@
+## [0.1.3] - 2019-10-08.
+
+* Timer stop fix
+
 ## [0.1.2] - 2019-10-08.
 
 * Refresh function awaiting fix
