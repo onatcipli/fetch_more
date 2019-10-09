@@ -18,6 +18,8 @@ typedef ItemBuilder = Widget Function(
 );
 
 class FetchMoreBuilder extends StatefulWidget {
+  final GlobalKey<FetchMoreBuilderState> key;
+
   /// If you need to control FetchMoreBuilder outside the widget you can provide the BLoC from outside.
   final FetchMoreBloc fetchMoreBloc;
 
@@ -38,6 +40,7 @@ class FetchMoreBuilder extends StatefulWidget {
   final double scrollThreshold;
 
   FetchMoreBuilder({
+    this.key,
     @required this.dataFetcher,
     @required this.itemBuilder,
     @required this.limit,
@@ -49,10 +52,10 @@ class FetchMoreBuilder extends StatefulWidget {
   });
 
   @override
-  _FetchMoreBuilderState createState() => _FetchMoreBuilderState();
+  FetchMoreBuilderState createState() => FetchMoreBuilderState();
 }
 
-class _FetchMoreBuilderState extends State<FetchMoreBuilder> {
+class FetchMoreBuilderState extends State<FetchMoreBuilder> {
   FetchMoreBloc fetchMoreBloc;
   ScrollController _scrollController;
 
@@ -111,7 +114,7 @@ class _FetchMoreBuilderState extends State<FetchMoreBuilder> {
                   : state.list.length + 1,
               controller: _scrollController,
             ),
-            onRefresh: _handleOnRefresh,
+            onRefresh: handleOnRefresh,
           );
         }
         return widget.refreshLoaderWidget;
@@ -142,7 +145,7 @@ class _FetchMoreBuilderState extends State<FetchMoreBuilder> {
     }
   }
 
-  Future<void> _handleOnRefresh() async {
+  Future<void> handleOnRefresh() async {
     fetchMoreBloc.dispatch(Refresh());
     await Future<dynamic>.delayed(Duration(seconds: 2));
     _handleEmptyList();

@@ -1,3 +1,7 @@
+## [0.1.4] - 2019-10-09.
+
+* Adding GlobalKey<FetchMoreBuilderState>()
+
 ## [0.1.3] - 2019-10-08.
 
 * Timer stop fix
