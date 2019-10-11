@@ -5,7 +5,6 @@ import 'package:rxdart/rxdart.dart';
 
 class FetchMoreBloc extends Bloc<FetchMoreEvent, FetchMoreState> {
   DataFetcher dataFetcher;
-  String _searchTerm = "";
   int limit;
   int index;
 
@@ -39,9 +38,7 @@ class FetchMoreBloc extends Bloc<FetchMoreEvent, FetchMoreState> {
         if (currentState is InitialFetchMoreState) {
           List<dynamic> list;
           try {
-            _searchTerm != ""
-                ? list = await dataFetcher(0, limit, _searchTerm)
-                : list = await dataFetcher(index, limit);
+            list = await dataFetcher(index, limit);
           } catch (e) {
             list = <dynamic>[];
             print(e);
@@ -53,9 +50,7 @@ class FetchMoreBloc extends Bloc<FetchMoreEvent, FetchMoreState> {
           List<dynamic> list;
           try {
             index = (currentState as Fetched).list.length;
-            _searchTerm != ""
-                ? list = await dataFetcher(index, limit, _searchTerm)
-                : list = await dataFetcher(index, limit);
+            list = await dataFetcher(index, limit);
           } catch (e) {
             list = <dynamic>[];
             print(e);
@@ -72,12 +67,6 @@ class FetchMoreBloc extends Bloc<FetchMoreEvent, FetchMoreState> {
       }
     } else if (event is Refresh) {
       index = 0;
-      yield InitialFetchMoreState();
-      dispatch(Fetch());
-      return;
-    } else if (event is Search) {
-      index = 0;
-      _searchTerm = event.searchTerm;
       yield InitialFetchMoreState();
       dispatch(Fetch());
       return;

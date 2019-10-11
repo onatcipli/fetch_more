@@ -1,3 +1,10 @@
+## [0.1.5] - 2019-11-09.
+
+* **FetchMoreController** created
+* Able to call **_fetch_** and **_refresh_** function form **FetchMoreController**
+* Disable to provide bloc out side of the class
+
+
 ## [0.1.4] - 2019-10-09.
 
 * Adding GlobalKey<FetchMoreBuilderState>()

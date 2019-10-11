@@ -10,10 +10,4 @@ class Fetch extends FetchMoreEvent {}
 
 class Refresh extends FetchMoreEvent {}
 
-class Search extends FetchMoreEvent {
-  final String searchTerm;
-
-  Search(this.searchTerm);
-}
-
 class ListViewIsNotScrollable extends FetchMoreEvent {}

@@ -1,5 +1,8 @@
 import 'dart:async';
 
+import 'package:fetch_more/default_bottom_loader.dart';
+import 'package:fetch_more/default_error_builder.dart';
+import 'package:fetch_more/default_refresh_loader.dart';
 import 'package:fetch_more/fetch_more.dart';
 import 'package:fetch_more/fetch_more_bloc.dart';
 import 'package:flutter/material.dart';
@@ -7,9 +10,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 typedef Future<List<dynamic>> DataFetcher(
   int index,
-  int limit, [
-  String searchTerm,
-]);
+  int limit,
+);
 
 typedef ItemBuilder = Widget Function(
   BuildContext context,
@@ -18,10 +20,9 @@ typedef ItemBuilder = Widget Function(
 );
 
 class FetchMoreBuilder extends StatefulWidget {
-  final GlobalKey<FetchMoreBuilderState> key;
-
-  /// If you need to control FetchMoreBuilder outside the widget you can provide the BLoC from outside.
-  final FetchMoreBloc fetchMoreBloc;
+  /// To be able to control [FetchMoreBuilder]
+  /// such as fetch new data, refresh
+  final GlobalKey<FetchMoreBuilderState> fetchMoreController;
 
   final DataFetcher dataFetcher;
   final ItemBuilder itemBuilder;
@@ -40,16 +41,15 @@ class FetchMoreBuilder extends StatefulWidget {
   final double scrollThreshold;
 
   FetchMoreBuilder({
-    this.key,
+    this.fetchMoreController,
     @required this.dataFetcher,
     @required this.itemBuilder,
     @required this.limit,
-    this.fetchMoreBloc,
     this.scrollThreshold = 200.0,
     this.bottomLoaderWidget = const DefaultBottomLoader(),
     this.errorWidget = const DefaultErrorBuilder(),
     this.refreshLoaderWidget = const DefaultRefreshLoader(),
-  });
+  }) : super(key: fetchMoreController);
 
   @override
   FetchMoreBuilderState createState() => FetchMoreBuilderState();
@@ -67,7 +67,7 @@ class FetchMoreBuilderState extends State<FetchMoreBuilder> {
 
   @override
   void initState() {
-    handleInitState();
+    _handleInitState();
     super.initState();
   }
 
@@ -79,14 +79,35 @@ class FetchMoreBuilderState extends State<FetchMoreBuilder> {
 
   @override
   Widget build(BuildContext context) {
-    if (widget.fetchMoreBloc != null) {
-      return _buildFetchMore();
-    } else {
-      return BlocProvider<FetchMoreBloc>(
-        builder: (context) => fetchMoreBloc,
-        child: _buildFetchMore(),
-      );
-    }
+    return BlocProvider<FetchMoreBloc>(
+      builder: (context) => fetchMoreBloc,
+      child: _buildFetchMore(),
+    );
+  }
+
+  /// This function for refreshing the list,
+  /// it recalls the [DataFetcher] with index equals to zero
+  Future<void> refresh() async {
+    fetchMoreBloc.dispatch(Refresh());
+    await Future<dynamic>.delayed(Duration(seconds: 1));
+    _handleEmptyList();
+  }
+
+  /// This function for fetching more data,
+  /// it recalls the [DataFetcher] with increasing the index
+  Future<void> fetch() async {
+    fetchMoreBloc.dispatch(Fetch());
+    await Future<dynamic>.delayed(Duration(seconds: 1));
+    _handleEmptyList();
+  }
+
+  void _handleInitState() {
+    _listViewKey = GlobalKey<ScrollableState>();
+    fetchMoreBloc =
+        FetchMoreBloc(dataFetcher: _dataFetcher, limit: widget.limit);
+    _scrollController = ScrollController();
+    _handleEmptyList();
+    _scrollController.addListener(_handleOnScroll);
   }
 
   BlocBuilder<FetchMoreBloc, FetchMoreState> _buildFetchMore() {
@@ -114,27 +135,12 @@ class FetchMoreBuilderState extends State<FetchMoreBuilder> {
                   : state.list.length + 1,
               controller: _scrollController,
             ),
-            onRefresh: handleOnRefresh,
+            onRefresh: refresh,
           );
         }
         return widget.refreshLoaderWidget;
       },
     );
-  }
-
-  void handleInitState() {
-    _listViewKey = GlobalKey<ScrollableState>();
-    if (widget.fetchMoreBloc == null) {
-      fetchMoreBloc =
-          FetchMoreBloc(dataFetcher: _dataFetcher, limit: widget.limit);
-    } else {
-      fetchMoreBloc = widget.fetchMoreBloc;
-      fetchMoreBloc.dataFetcher = _dataFetcher;
-      fetchMoreBloc.limit = widget.limit;
-    }
-    _scrollController = ScrollController();
-    _handleEmptyList();
-    _scrollController.addListener(_handleOnScroll);
   }
 
   void _handleOnScroll() {
@@ -145,16 +151,11 @@ class FetchMoreBuilderState extends State<FetchMoreBuilder> {
     }
   }
 
-  Future<void> handleOnRefresh() async {
-    fetchMoreBloc.dispatch(Refresh());
-    await Future<dynamic>.delayed(Duration(seconds: 2));
-    _handleEmptyList();
-  }
-
   void _handleRefreshTiming(Duration _totalTime) {
     Timer.periodic(
       Duration(milliseconds: 1000),
       (t) {
+        // ignore: invalid_use_of_protected_member
         if (_scrollController.positions.isEmpty) {
           return;
         } else {
@@ -180,7 +181,7 @@ class FetchMoreBuilderState extends State<FetchMoreBuilder> {
         if (_listViewKey.currentContext == null) {
           _handleRefreshTiming(_totalTime);
         } else {
-          if (fetchMoreBloc.currentState == Fetched) {
+          if (fetchMoreBloc.currentState is Fetched) {
             if (_scrollController.position.minScrollExtent == 0.0 &&
                 _scrollController.position.maxScrollExtent == 0.0) {
               fetchMoreBloc.dispatch(Fetch());
@@ -190,51 +191,6 @@ class FetchMoreBuilderState extends State<FetchMoreBuilder> {
           }
         }
       },
-    );
-  }
-}
-
-class DefaultBottomLoader extends StatelessWidget {
-  const DefaultBottomLoader();
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      alignment: Alignment.center,
-      child: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: SizedBox(
-            width: 33,
-            height: 33,
-            child: CircularProgressIndicator(
-              strokeWidth: 1.5,
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class DefaultErrorBuilder extends StatelessWidget {
-  const DefaultErrorBuilder();
-
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Text('Failed to fetch posts'),
-    );
-  }
-}
-
-class DefaultRefreshLoader extends StatelessWidget {
-  const DefaultRefreshLoader();
-
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: CircularProgressIndicator(),
     );
   }
 }
