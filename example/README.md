@@ -3,12 +3,15 @@
 ```dart
 import 'dart:math';
 
-import 'package:fetch_more/bloc.dart';
+import 'package:fetch_more/fetch_more.dart';
 import 'package:flutter/material.dart';
 
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
+  final GlobalKey<FetchMoreBuilderState> _fetchMoreController =
+      GlobalKey<FetchMoreBuilderState>();
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -21,9 +24,30 @@ class MyApp extends StatelessWidget {
           title: Text('Fetch More Builder'),
         ),
         body: FetchMoreBuilder(
+          fetchMoreController: _fetchMoreController,
           itemBuilder: _itemBuilder,
           dataFetcher: _dataFetcher,
-          limit: 20,
+          limit: 10,
+        ),
+        floatingActionButton: Row(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            FloatingActionButton(
+              child: Icon(Icons.refresh),
+              onPressed: () {
+                _fetchMoreController.currentState.refresh();
+              },
+            ),
+            SizedBox(width: 15,),
+            FloatingActionButton(
+              child: Icon(Icons.get_app),
+              onPressed: () {
+                _fetchMoreController.currentState.fetch();
+              },
+            ),
+          ],
         ),
       ),
     );
