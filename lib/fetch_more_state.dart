@@ -3,12 +3,20 @@ import 'package:meta/meta.dart';
 
 @immutable
 abstract class FetchMoreState extends Equatable {
-  FetchMoreState([List props = const <dynamic>[]]) : super(props);
+  FetchMoreState([List props = const <dynamic>[]]) : super();
 }
 
-class InitialFetchMoreState extends FetchMoreState {}
+class InitialFetchMoreState extends FetchMoreState {
+  @override
+  // TODO: implement props
+  List<Object> get props => null;
+}
 
-class FetchError extends FetchMoreState {}
+class FetchError extends FetchMoreState {
+  @override
+  // TODO: implement props
+  List<Object> get props => null;
+}
 
 class Fetched extends FetchMoreState {
   final List<dynamic> list;
@@ -22,4 +30,8 @@ class Fetched extends FetchMoreState {
         list: list ?? this.list,
         hasReachedMax: hasReachedMax ?? this.hasReachedMax);
   }
+
+  @override
+  // TODO: implement props
+  List<Object> get props => [list, hasReachedMax];
 }

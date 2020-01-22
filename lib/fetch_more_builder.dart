@@ -80,7 +80,7 @@ class FetchMoreBuilderState extends State<FetchMoreBuilder> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider<FetchMoreBloc>(
-      builder: (context) => fetchMoreBloc,
+      create: (context) => fetchMoreBloc,
       child: _buildFetchMore(),
     );
   }
@@ -88,7 +88,7 @@ class FetchMoreBuilderState extends State<FetchMoreBuilder> {
   /// This function for refreshing the list,
   /// it recalls the [DataFetcher] with index equals to zero
   Future<void> refresh() async {
-    fetchMoreBloc.dispatch(Refresh());
+    fetchMoreBloc.add(Refresh());
     await Future<dynamic>.delayed(Duration(seconds: 1));
     _handleEmptyList();
   }
@@ -96,7 +96,7 @@ class FetchMoreBuilderState extends State<FetchMoreBuilder> {
   /// This function for fetching more data,
   /// it recalls the [DataFetcher] with increasing the index
   Future<void> fetch() async {
-    fetchMoreBloc.dispatch(Fetch());
+    fetchMoreBloc.add(Fetch());
     await Future<dynamic>.delayed(Duration(seconds: 1));
     _handleEmptyList();
   }
@@ -147,7 +147,7 @@ class FetchMoreBuilderState extends State<FetchMoreBuilder> {
     final maxScroll = _scrollController.position.maxScrollExtent;
     final currentScroll = _scrollController.position.pixels;
     if (maxScroll - currentScroll <= widget.scrollThreshold) {
-      fetchMoreBloc.dispatch(Fetch());
+      fetchMoreBloc.add(Fetch());
     }
   }
 
@@ -161,7 +161,7 @@ class FetchMoreBuilderState extends State<FetchMoreBuilder> {
         } else {
           if (_scrollController.position.minScrollExtent == 0.0 &&
               _scrollController.position.maxScrollExtent == 0.0) {
-            fetchMoreBloc.dispatch(Fetch());
+            fetchMoreBloc.add(Fetch());
             t.cancel();
           } else {
             _totalTime += Duration(milliseconds: 1000);
@@ -181,10 +181,10 @@ class FetchMoreBuilderState extends State<FetchMoreBuilder> {
         if (_listViewKey.currentContext == null) {
           _handleRefreshTiming(_totalTime);
         } else {
-          if (fetchMoreBloc.currentState is Fetched) {
+          if (fetchMoreBloc.initialState is Fetched) {
             if (_scrollController.position.minScrollExtent == 0.0 &&
                 _scrollController.position.maxScrollExtent == 0.0) {
-              fetchMoreBloc.dispatch(Fetch());
+              fetchMoreBloc.add(Fetch());
             }
           } else {
             _handleRefreshTiming(_totalTime);

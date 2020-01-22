@@ -1,3 +1,7 @@
+## [1.0.0] - 2020-01-24.
+
+* **UPDATE** : bloc, flutter_bloc and equatable packages updated
+
 ## [0.1.5] - 2019-11-09.
 
 * **FetchMoreController** created

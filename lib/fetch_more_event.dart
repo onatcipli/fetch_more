@@ -3,11 +3,23 @@ import 'package:meta/meta.dart';
 
 @immutable
 abstract class FetchMoreEvent extends Equatable {
-  FetchMoreEvent([List props = const <dynamic>[]]) : super(props);
+  FetchMoreEvent([List props = const <dynamic>[]]) : super();
 }
 
-class Fetch extends FetchMoreEvent {}
+class Fetch extends FetchMoreEvent {
+  @override
+  // TODO: implement props
+  List<Object> get props => null;
+}
 
-class Refresh extends FetchMoreEvent {}
+class Refresh extends FetchMoreEvent {
+  @override
+  // TODO: implement props
+  List<Object> get props => null;
+}
 
-class ListViewIsNotScrollable extends FetchMoreEvent {}
+class ListViewIsNotScrollable extends FetchMoreEvent {
+  @override
+  // TODO: implement props
+  List<Object> get props => null;
+}

@@ -10,7 +10,7 @@ class FetchMoreBloc extends Bloc<FetchMoreEvent, FetchMoreState> {
 
   FetchMoreBloc({this.dataFetcher, this.limit}) {
     index = 0;
-    dispatch(Fetch());
+    add(Fetch());
   }
 
   @override
@@ -22,7 +22,7 @@ class FetchMoreBloc extends Bloc<FetchMoreEvent, FetchMoreState> {
     Stream<FetchMoreState> Function(FetchMoreEvent event) next,
   ) {
     return super.transformEvents(
-      (events as Observable<FetchMoreEvent>).debounceTime(
+      events.debounceTime(
         Duration(milliseconds: 500),
       ),
       next,
@@ -33,9 +33,9 @@ class FetchMoreBloc extends Bloc<FetchMoreEvent, FetchMoreState> {
   Stream<FetchMoreState> mapEventToState(
     FetchMoreEvent event,
   ) async* {
-    if (event is Fetch && !_hasReachedMax(currentState)) {
+    if (event is Fetch && !_hasReachedMax(state)) {
       try {
-        if (currentState is InitialFetchMoreState) {
+        if (state is InitialFetchMoreState) {
           List<dynamic> list;
           try {
             list = await dataFetcher(index, limit);
@@ -46,19 +46,19 @@ class FetchMoreBloc extends Bloc<FetchMoreEvent, FetchMoreState> {
           yield Fetched(list: list, hasReachedMax: false);
           return;
         }
-        if (currentState is Fetched) {
+        if (state is Fetched) {
           List<dynamic> list;
           try {
-            index = (currentState as Fetched).list.length;
+            index = (state as Fetched).list.length;
             list = await dataFetcher(index, limit);
           } catch (e) {
             list = <dynamic>[];
             print(e);
           }
           yield list.isEmpty
-              ? (currentState as Fetched).copyWith(hasReachedMax: true)
+              ? (state as Fetched).copyWith(hasReachedMax: true)
               : Fetched(
-                  list: (currentState as Fetched).list + list,
+                  list: (state as Fetched).list + list,
                   hasReachedMax: false,
                 );
         }
@@ -68,11 +68,11 @@ class FetchMoreBloc extends Bloc<FetchMoreEvent, FetchMoreState> {
     } else if (event is Refresh) {
       index = 0;
       yield InitialFetchMoreState();
-      dispatch(Fetch());
+      add(Fetch());
       return;
     } else if (event is ListViewIsNotScrollable) {
-      if (currentState is Fetched) {
-        yield (currentState as Fetched).copyWith(hasReachedMax: true);
+      if (state is Fetched) {
+        yield (state as Fetched).copyWith(hasReachedMax: true);
       }
     }
   }
