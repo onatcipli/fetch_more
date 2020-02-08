@@ -117,13 +117,14 @@ class FetchMoreBuilderState extends State<FetchMoreBuilder> {
           return widget.errorWidget;
         }
         if (state is Fetched) {
-          if (state.list.isEmpty) {
+          if (state.list == null && state.list.isEmpty) {
             return Center(
               child: Text('No data available now!'),
             );
           }
           return RefreshIndicator(
             child: ListView.builder(
+              physics: AlwaysScrollableScrollPhysics(),
               key: _listViewKey,
               itemBuilder: (BuildContext context, int index) {
                 return index >= state.list.length

@@ -1,3 +1,8 @@
+## [1.0.1] - 2020-02-08.
+
+* AlwaysScrollableScrollPhysics added
+* package updates bloc and flutter_bloc
+
 ## [1.0.0] - 2020-01-24.
 
 * **UPDATE** : bloc, flutter_bloc and equatable packages updated

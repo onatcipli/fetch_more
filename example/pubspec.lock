@@ -77,14 +77,14 @@ packages:
       name: equatable
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.0.2"
+    version: "1.0.3"
   fetch_more:
     dependency: "direct main"
     description:
       path: ".."
       relative: true
     source: path
-    version: "0.1.6"
+    version: "1.0.1"
   flutter:
     dependency: "direct main"
     description: flutter
@@ -96,7 +96,7 @@ packages:
       name: flutter_bloc
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "3.1.0"
+    version: "3.2.0"
   flutter_test:
     dependency: "direct dev"
     description: flutter
