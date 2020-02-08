@@ -117,7 +117,12 @@ class FetchMoreBuilderState extends State<FetchMoreBuilder> {
           return widget.errorWidget;
         }
         if (state is Fetched) {
-          if (state.list == null && state.list.isEmpty) {
+          if (state.list == null) {
+            return Center(
+              child: Text('No data available now!'),
+            );
+          }
+          if (state.list.isEmpty) {
             return Center(
               child: Text('No data available now!'),
             );

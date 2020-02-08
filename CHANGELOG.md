@@ -1,3 +1,7 @@
+## [1.0.2] - 2020-02-08.
+
+* null check fix
+
 ## [1.0.1] - 2020-02-08.
 
 * AlwaysScrollableScrollPhysics added
