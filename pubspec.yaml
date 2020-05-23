@@ -1,6 +1,6 @@
 name: fetch_more
 description: A Flutter package that helps to collect and show data inside a ListView with a limit and fetch more when user needs more data.
-version: 1.0.2
+version: 2.0.0
 author: Onat Çipli<ciplionat35@gmail.com>
 homepage: https://github.com/onatcipli/fetch_more.git
 
@@ -12,10 +12,10 @@ dependencies:
     sdk: flutter
 
   equatable: ^1.0.3
-  bloc: ^3.0.0
-  flutter_bloc: ^3.2.0
+  bloc: ^4.0.0
+  flutter_bloc: ^4.0.0
   meta: ^1.1.8
-  rxdart: ^0.23.1
+  rxdart: ^0.24.1
 
 dev_dependencies:
   flutter_test:

@@ -1,4 +1,5 @@
 import 'dart:async';
+
 import 'package:bloc/bloc.dart';
 import 'package:fetch_more/fetch_more.dart';
 import 'package:rxdart/rxdart.dart';
@@ -17,16 +18,13 @@ class FetchMoreBloc extends Bloc<FetchMoreEvent, FetchMoreState> {
   FetchMoreState get initialState => InitialFetchMoreState();
 
   @override
-  Stream<FetchMoreState> transformEvents(
-    Stream<FetchMoreEvent> events,
-    Stream<FetchMoreState> Function(FetchMoreEvent event) next,
-  ) {
+  Stream<Transition<FetchMoreEvent, FetchMoreState>> transformEvents(
+      Stream<FetchMoreEvent> events, transitionFn) {
     return super.transformEvents(
-      events.debounceTime(
-        Duration(milliseconds: 500),
-      ),
-      next,
-    );
+        events.debounceTime(
+          Duration(milliseconds: 500),
+        ),
+        transitionFn);
   }
 
   @override

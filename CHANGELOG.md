@@ -1,3 +1,7 @@
+## [2.0.0] - 2020-02-08.
+
+* versions updated
+
 ## [1.0.2] - 2020-02-08.
 
 * null check fix
