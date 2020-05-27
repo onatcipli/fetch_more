@@ -5,6 +5,9 @@ I inspired from [Felix Angelov](https://twitter.com/felangelov)'s [flutter bloc 
 A Flutter package that helps to collect and show data inside a ListView with a limit and fetch more when user needs more data.
 Also has a RefreshIndicator that sends request with index zero.
 
+## Latest Stable Version
+
+    fetch_more: 2.0.0
 
 ### FetchMoreBuilder with specify the LoaderWidgets
 

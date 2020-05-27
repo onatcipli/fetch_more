@@ -1,4 +1,8 @@
-## [2.0.0] - 2020-02-08.
+## [2.0.1] - 2020-05-27.
+
+* initialState added to FetchMoreBuilder
+
+## [2.0.0] - 2020-05-26.
 
 * versions updated
 

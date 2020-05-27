@@ -8,18 +8,24 @@ abstract class FetchMoreEvent extends Equatable {
 
 class Fetch extends FetchMoreEvent {
   @override
-  // TODO: implement props
   List<Object> get props => null;
 }
 
 class Refresh extends FetchMoreEvent {
   @override
-  // TODO: implement props
   List<Object> get props => null;
 }
 
 class ListViewIsNotScrollable extends FetchMoreEvent {
   @override
-  // TODO: implement props
   List<Object> get props => null;
+}
+
+class AddItems extends FetchMoreEvent {
+  final List items;
+
+  AddItems(this.items);
+
+  @override
+  List<Object> get props => [items];
 }

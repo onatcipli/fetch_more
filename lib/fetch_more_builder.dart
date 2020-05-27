@@ -27,6 +27,9 @@ class FetchMoreBuilder extends StatefulWidget {
   final DataFetcher dataFetcher;
   final ItemBuilder itemBuilder;
 
+  /// You can pass the initial state of your list to [FetchMoreBuilder]
+  final List initialState;
+
   /// This widgets appear in the bottom of your list
   /// when you scroll down to the bottom of your list and
   /// it will disappear when the data fetched
@@ -49,6 +52,7 @@ class FetchMoreBuilder extends StatefulWidget {
     this.bottomLoaderWidget = const DefaultBottomLoader(),
     this.errorWidget = const DefaultErrorBuilder(),
     this.refreshLoaderWidget = const DefaultRefreshLoader(),
+    this.initialState,
   }) : super(key: fetchMoreController);
 
   @override
@@ -106,6 +110,7 @@ class FetchMoreBuilderState extends State<FetchMoreBuilder> {
     fetchMoreBloc =
         FetchMoreBloc(dataFetcher: _dataFetcher, limit: widget.limit);
     _scrollController = ScrollController();
+    _handleInitialState();
     _handleEmptyList();
     _scrollController.addListener(_handleOnScroll);
   }
@@ -198,5 +203,11 @@ class FetchMoreBuilderState extends State<FetchMoreBuilder> {
         }
       },
     );
+  }
+
+  void _handleInitialState() {
+    if (widget.initialState != null) {
+      fetchMoreBloc.add(AddItems(widget.initialState));
+    }
   }
 }

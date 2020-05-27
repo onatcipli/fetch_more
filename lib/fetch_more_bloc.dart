@@ -72,6 +72,20 @@ class FetchMoreBloc extends Bloc<FetchMoreEvent, FetchMoreState> {
       if (state is Fetched) {
         yield (state as Fetched).copyWith(hasReachedMax: true);
       }
+    } else if (event is AddItems) {
+      List<dynamic> list = [];
+      if (event.items != null && event.items.isNotEmpty) {
+        if (state is Fetched) {
+          list.addAll((state as Fetched).list);
+          index = list.length;
+        }
+        list.addAll(event.items);
+        index = list.length;
+        yield Fetched(
+          list: list,
+          hasReachedMax: false,
+        );
+      }
     }
   }
 
